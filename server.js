@@ -12,14 +12,25 @@ app.use(express.json());
 const PORT = process.env.PORT || 5000;
 const DB_CONNECTION = process.env.DB_CONNECTION;
 
+// mongoose.connect(DB_CONNECTION, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// }).then(() => {
+//   console.log('Connected to DB');
+// }).catch(err => {
+//   console.error(err);
+// });
+
 mongoose.connect(DB_CONNECTION, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds
 }).then(() => {
   console.log('Connected to DB');
 }).catch(err => {
-  console.error(err);
+  console.error('Failed to connect to DB', err);
 });
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
