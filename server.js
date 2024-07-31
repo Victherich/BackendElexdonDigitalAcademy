@@ -8,51 +8,6 @@
 
 // const app = express();
 
-// //middleware
-// app.use(cors());
-// app.use(express.json());
-// app.use(bodyParser.json());
-
-// const PORT = process.env.PORT || 5000;
-// const DB_CONNECTION = process.env.DB_CONNECTION;
-
-
-// mongoose.connect(DB_CONNECTION, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-//   serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds
-// }).then(() => {
-//   console.log('Connected to DB');
-// }).catch(err => {
-//   console.error('Failed to connect to DB', err);
-// });
-
-
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}`);
-// });
-
-// const authRoutes = require('./routes/auth');
-// app.use('/api/auth', authRoutes);
-
-
-// const orderRoutes = require('./routes/order');
-// app.use('/api', orderRoutes);
-
-
-
-
-
-// const express = require('express');
-// const cors = require('cors');
-// const mongoose = require('mongoose');
-// const dotenv = require('dotenv');
-// const bodyParser = require('body-parser');
-
-// dotenv.config();
-
-// const app = express();
-
 // // Middleware
 // app.use(cors());
 // app.use(express.json());
@@ -65,7 +20,7 @@
 // mongoose.connect(DB_CONNECTION, {
 //   useNewUrlParser: true,
 //   useUnifiedTopology: true,
-//   serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds
+//   serverSelectionTimeoutMS: 30000,
 // }).then(() => {
 //   console.log('Connected to DB');
 // }).catch(err => {
@@ -76,11 +31,13 @@
 // const authRoutes = require('./routes/auth');
 // const orderRoutes = require('./routes/order');
 // const paystackRoutes = require('./routes/paystack');
+// const instructorRoutes = require('./routes/instructor'); // New instructor route
 
 // // Route middlewares
 // app.use('/api/auth', authRoutes);
 // app.use('/api', orderRoutes);
 // app.use('/api', paystackRoutes);
+// app.use('/api/instructor', instructorRoutes); // New instructor route
 
 // // Start the server
 // app.listen(PORT, () => {
@@ -112,7 +69,7 @@ const DB_CONNECTION = process.env.DB_CONNECTION;
 mongoose.connect(DB_CONNECTION, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds
+  serverSelectionTimeoutMS: 30000,
 }).then(() => {
   console.log('Connected to DB');
 }).catch(err => {
@@ -123,13 +80,15 @@ mongoose.connect(DB_CONNECTION, {
 const authRoutes = require('./routes/auth');
 const orderRoutes = require('./routes/order');
 const paystackRoutes = require('./routes/paystack');
-const contactRoutes = require('./routes/contact'); // New contact route
+const instructorRoutes = require('./routes/instructor');
+const affiliateRoutes = require('./routes/affiliate'); // New affiliate route
 
 // Route middlewares
 app.use('/api/auth', authRoutes);
 app.use('/api', orderRoutes);
 app.use('/api', paystackRoutes);
-app.use('/api', contactRoutes); // New contact route
+app.use('/api/instructor', instructorRoutes);
+app.use('/api/affiliate', affiliateRoutes); // New affiliate route
 
 // Start the server
 app.listen(PORT, () => {

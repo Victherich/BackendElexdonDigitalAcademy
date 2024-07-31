@@ -1,17 +1,23 @@
 
+
+
+
 // const express = require('express');
 // const bcrypt = require('bcryptjs');
 // const jwt = require('jsonwebtoken');
 // const nodemailer = require('nodemailer');
 // const User = require('../models/User');
 // const router = express.Router();
+// require('dotenv').config();
 
 // const JWT_SECRET = process.env.JWT_SECRET;
 
 // // Utility function to send emails
 // const sendVerificationEmail = async (email, token) => {
 //   const transporter = nodemailer.createTransport({
-//     service: 'gmail',
+//     host: 'mail.elexdontech.com', // Replace with your actual domain
+//     port: 465, // Use 465 for SSL
+//     secure: true, // True for port 465
 //     auth: {
 //       user: process.env.EMAIL,
 //       pass: process.env.EMAIL_PASSWORD
@@ -55,8 +61,6 @@
 //   }
 // });
 
-
-
 // // Verify Email
 // router.get('/verify/:token', async (req, res) => {
 //   try {
@@ -80,9 +84,6 @@
 //     res.status(400).send({ error: 'Invalid or expired token.' });
 //   }
 // });
-
-
-
 
 // // Login
 // router.post('/login', async (req, res) => {
@@ -129,7 +130,6 @@
 // });
 
 // // Forgot Password
-
 // router.post('/forgot-password', async (req, res) => {
 //   const { email } = req.body;
 
@@ -146,7 +146,9 @@
 
 //     // Set up the email transporter
 //     const transporter = nodemailer.createTransport({
-//       service: 'gmail',
+//       host: 'mail.elexdontech.com', // Replace with your actual domain
+//       port: 465, // Use 465 for SSL
+//       secure: true, // True for port 465
 //       auth: {
 //         user: process.env.EMAIL,
 //         pass: process.env.EMAIL_PASSWORD
@@ -168,7 +170,6 @@
 //     res.status(500).send({ error: 'An error occurred while processing your request. Please try again.' });
 //   }
 // });
-
 
 // // Reset Password
 // router.post('/reset-password/:token', async (req, res) => {
@@ -207,7 +208,6 @@
 
 
 
-
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -221,9 +221,9 @@ const JWT_SECRET = process.env.JWT_SECRET;
 // Utility function to send emails
 const sendVerificationEmail = async (email, token) => {
   const transporter = nodemailer.createTransport({
-    host: 'mail.elexdontech.com', // Replace with your actual domain
-    port: 465, // Use 465 for SSL
-    secure: true, // True for port 465
+    host: 'mail.elexdontech.com',
+    port: 465,
+    secure: true,
     auth: {
       user: process.env.EMAIL,
       pass: process.env.EMAIL_PASSWORD
@@ -242,7 +242,7 @@ const sendVerificationEmail = async (email, token) => {
 
 // Sign Up
 router.post('/signup', async (req, res) => {
-  const { fullName, email, phoneNumber, password } = req.body;
+  const { fullName, email, phoneNumber, password, referralCode } = req.body;
 
   try {
     // Check if the email is already registered
@@ -253,14 +253,17 @@ router.post('/signup', async (req, res) => {
 
     // Hash the password and create a new user
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ fullName, email, phoneNumber, password: hashedPassword });
+    const newUser = new User({ fullName, email, phoneNumber, password: hashedPassword, referralCode });
     const savedUser = await newUser.save();
 
     // Generate a verification token and send verification email
     const token = jwt.sign({ id: savedUser._id }, JWT_SECRET, { expiresIn: '1h' });
     await sendVerificationEmail(email, token);
 
-    res.status(201).send({ message: 'User registered. Please verify your email.' });
+    res.status(201).send({
+      message: 'User registered. Please verify your email.',
+      referralCode: savedUser.referralCode // Return the referral code in the response
+    });
   } catch (error) {
     console.error('Error during sign-up:', error);
     res.status(400).send({ error: 'An error occurred during sign-up. Please try again.' });
@@ -326,7 +329,8 @@ router.post('/login', async (req, res) => {
         userId: user._id,
         fullName: user.fullName,
         email: user.email,
-        phoneNumber: user.phoneNumber
+        phoneNumber: user.phoneNumber,
+        referralCode: user.referralCode // Include referral code in login response
       }
     });
   } catch (error) {
@@ -352,9 +356,9 @@ router.post('/forgot-password', async (req, res) => {
 
     // Set up the email transporter
     const transporter = nodemailer.createTransport({
-      host: 'mail.elexdontech.com', // Replace with your actual domain
-      port: 465, // Use 465 for SSL
-      secure: true, // True for port 465
+      host: 'mail.elexdontech.com',
+      port: 465,
+      secure: true,
       auth: {
         user: process.env.EMAIL,
         pass: process.env.EMAIL_PASSWORD
@@ -411,4 +415,3 @@ router.post('/logout', (req, res) => {
 });
 
 module.exports = router;
-
