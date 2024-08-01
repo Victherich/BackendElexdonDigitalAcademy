@@ -4,10 +4,11 @@ const Affiliate = require('../models/Affiliate');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 
-// Generate a 6-digit referral code
+// Generate a 10-digit referral code
 const generateReferralCode = () => {
-  return crypto.randomBytes(3).toString('hex').toUpperCase();
+  return crypto.randomBytes(5).toString('hex').toUpperCase();
 };
+
 
 // Nodemailer transporter setup
 let transporter = nodemailer.createTransport({

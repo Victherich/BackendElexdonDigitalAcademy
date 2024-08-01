@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
   phoneNumber: { type: String, required: true },
   password: { type: String, required: true },
   isVerified: { type: Boolean, default: false },
-  referralCode: { type: String } // New field for referral code
+  referrerCode: { type: String } // New field for referrer code
 });
 
 module.exports = mongoose.model('User', userSchema);
