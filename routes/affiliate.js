@@ -62,4 +62,16 @@ router.post('/register', async (req, res) => {
   }
 });
 
+
+//get all
+router.get('/all', async (req, res) => {
+  try {
+    const affiliates = await Affiliate.find();
+    res.status(200).json(affiliates);
+  } catch (error) {
+    console.error('Error fetching affiliates:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;
