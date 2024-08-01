@@ -33,7 +33,7 @@ router.post('/register', async (req, res) => {
 
     // Generate referral code and link
     const referralCode = generateReferralCode();
-    const referralLink = `https://www.elexdondigitalacademy.com/ref/${referralCode}`;
+    const referralLink = `${process.env.CLIENT_URL}/ref/${referralCode}`;
 
     // Create new affiliate
     const newAffiliate = new Affiliate({ firstName, lastName, email, phone, bankAccount, referralCode, referralLink });
