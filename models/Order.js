@@ -32,7 +32,7 @@ const orderSchema = new mongoose.Schema({
   name: { type: String, required: true },
   phone: { type: String, required: true },
   email: { type: String, required: true },
-  refererCode: { type: String, default: '' }, // New field for referral code
+  referrerCode: { type: String, default: '' }, // New field for referral code
   cartItems: [{
     title: { type: String, required: true },
     price: { type: String, required: true },
